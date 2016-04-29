@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center_vertical|center_horizontal">
+
+	<EditText
+		android:layout_width="240dp"
+		android:layout_height="match_parent"
+		android:id="@+id/channelField"
+		android:maxLines="1"
+		android:focusable="true"
+		android:inputType="text"
+		android:layout_gravity="center_vertical|center_horizontal"
+		android:layout_marginBottom="20dp"
+		android:hint="Channel" />
+
+	<Spinner
+		android:id="@+id/channelSpinner"
+		android:layout_width="240dp"
+		android:layout_marginBottom="20dp"
+		android:layout_height="wrap_content" />
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="wrap_content"
+	android:layout_marginBottom="20dp"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center_horizontal">
+
+	<Button
+		android:text="@string/add"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:id="@+id/addChannel" />
+
+	<Button
+		android:text="@string/edit"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:id="@+id/editChannel" />
+
+	<Button
+		android:text="@string/delete"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:id="@+id/deleteChannel" />
+
+</LinearLayout>
+
+	<EditText
+		android:layout_width="240dp"
+		android:layout_height="wrap_content"
+		android:id="@+id/emailField"
+		android:maxLines="1"
+		android:focusable="true"
+		android:inputType="textEmailAddress"
+		android:layout_gravity="center_vertical|center_horizontal"
+		android:hint="@string/email" />
+
+	<EditText
+		android:layout_width="240dp"
+		android:layout_height="wrap_content"
+		android:id="@+id/passwordField"
+		android:maxLines="1"
+		android:focusable="true"
+		android:inputType="textPassword"
+		android:layout_gravity="center_vertical|center_horizontal"
+		android:layout_marginBottom="30dp"
+		android:hint="@string/password" />
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/save"
+		android:id="@+id/save"
+		android:layout_gravity="center_vertical|center_horizontal"/>
+</LinearLayout>
