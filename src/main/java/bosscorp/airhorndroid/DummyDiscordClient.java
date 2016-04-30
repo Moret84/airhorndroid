@@ -1,4 +1,4 @@
-package pesance.airhorndroid;
+package bosscorp.airhorndroid;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -9,9 +9,10 @@ import cz.msebera.android.httpclient.Header;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-public class Pesance
+public class DummyDiscordClient
 {
 	public static final String BASE_URL = "https://discordapp.com/api/";
+	private static String mToken;
 
 	private static AsyncHttpClient mClient = new AsyncHttpClient();
 

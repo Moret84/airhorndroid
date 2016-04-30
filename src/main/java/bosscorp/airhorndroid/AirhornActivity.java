@@ -1,4 +1,4 @@
-package pesance.airhorndroid;
+package bosscorp.airhorndroid;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,7 +16,7 @@ import cz.msebera.android.httpclient.Header;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-public class PesanceActivity extends ActionBarActivity
+public class AirhornActivity extends ActionBarActivity
 {
 	private JsonHttpResponseHandler mResponseHandler;
 	private String mToken;
@@ -37,7 +37,7 @@ public class PesanceActivity extends ActionBarActivity
 				try
 				{
 					mToken = response.getString("token");
-					Toast.makeText(PesanceActivity.this, mToken, Toast.LENGTH_LONG).show();
+					Toast.makeText(AirhornActivity.this, mToken, Toast.LENGTH_LONG).show();
 				}
 				catch(JSONException e)
 				{
@@ -96,12 +96,12 @@ public class PesanceActivity extends ActionBarActivity
 
 	private void sendMessage(String arg)
 	{
-		Pesance.sendMessage(mToken, mSharedPreferences.getString(SettingsActivity.CHANNEL, ""), "!airhorn " + arg);
+		DummyDiscordClient.sendMessage(mToken, mSharedPreferences.getString(SettingsActivity.CURRENT_CHANNEL, ""), "!airhorn " + arg);
 	}
 
 	private void login()
 	{
-		Pesance.login(mSharedPreferences.getString(SettingsActivity.EMAIL, ""),
+		DummyDiscordClient.login(mSharedPreferences.getString(SettingsActivity.EMAIL, ""),
 				mSharedPreferences.getString(SettingsActivity.PASSWORD, ""),
 				mResponseHandler);
 	}
