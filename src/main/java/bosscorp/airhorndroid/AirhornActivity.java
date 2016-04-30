@@ -27,7 +27,7 @@ public class AirhornActivity extends ActionBarActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		mSharedPreferences = getSharedPreferences(SettingsActivity.PREFERENCES, MODE_PRIVATE);
+		mSharedPreferences = getSharedPreferences(Settings.PREFERENCES, MODE_PRIVATE);
 
 		mResponseHandler = new JsonHttpResponseHandler()
 		{
@@ -96,13 +96,13 @@ public class AirhornActivity extends ActionBarActivity
 
 	private void sendMessage(String arg)
 	{
-		DummyDiscordClient.sendMessage(mToken, mSharedPreferences.getString(SettingsActivity.CURRENT_CHANNEL, ""), "!airhorn " + arg);
+		DummyDiscordClient.sendMessage(mToken, mSharedPreferences.getString(Settings.CURRENT_CHANNEL, ""), "!airhorn " + arg);
 	}
 
 	private void login()
 	{
-		DummyDiscordClient.login(mSharedPreferences.getString(SettingsActivity.EMAIL, ""),
-				mSharedPreferences.getString(SettingsActivity.PASSWORD, ""),
+		DummyDiscordClient.login(mSharedPreferences.getString(Settings.EMAIL, ""),
+				mSharedPreferences.getString(Settings.PASSWORD, ""),
 				mResponseHandler);
 	}
 

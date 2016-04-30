@@ -21,13 +21,6 @@ import java.util.LinkedHashMap;
 
 public class SettingsActivity extends FragmentActivity implements ChannelDialogListener, OnItemSelectedListener, OnClickListener
 {
-	public final static String PREFERENCES = "pesance.airhorndroid.PREFERENCES";
-
-	public final static String CURRENT_CHANNEL_POSITION = "pesance.airhorndroid.CURRENT_CHANNEL_POSITION";
-	public final static String CURRENT_CHANNEL = "pesance.airhorndroid.CURRENT_CHANNEL";
-	public final static String CHANNELS = "pesance.airhorndroid.CHANNELS";
-	public final static String EMAIL = "pesance.airhorndroid.EMAIL";
-	public final static String PASSWORD = "pesance.airhorndroid.PASSWORD";
 
 	private EditText mEmailField, mPasswordField;
 	private String mCurrentChannel;
@@ -51,10 +44,10 @@ public class SettingsActivity extends FragmentActivity implements ChannelDialogL
 	{
 		Editor editor = mSharedPreferences.edit();
 
-		editor.putString(EMAIL, mEmailField.getText().toString());
-		editor.putString(PASSWORD, mPasswordField.getText().toString());
-		editor.putString(CHANNELS, mGson.toJson(mChannels));
-		editor.putString(CURRENT_CHANNEL, mChannels.get(mCurrentChannel));
+		editor.putString(Settings.EMAIL, mEmailField.getText().toString());
+		editor.putString(Settings.PASSWORD, mPasswordField.getText().toString());
+		editor.putString(Settings.CHANNELS, mGson.toJson(mChannels));
+		editor.putString(Settings.CURRENT_CHANNEL, mChannels.get(mCurrentChannel));
 
 		editor.commit();
 	}
@@ -112,9 +105,9 @@ public class SettingsActivity extends FragmentActivity implements ChannelDialogL
 		mPasswordField = (EditText) findViewById(R.id.passwordField);
 		mChannelSpinner = (Spinner) findViewById(R.id.channelSpinner);
 		mChannelSpinner.setOnItemSelectedListener(this);
-		mSharedPreferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+		mSharedPreferences = getSharedPreferences(Settings.PREFERENCES, MODE_PRIVATE);
 		mGson = new Gson();
-		mChannels = mGson.fromJson(mSharedPreferences.getString(CHANNELS, ""),
+		mChannels = mGson.fromJson(mSharedPreferences.getString(Settings.CHANNELS, ""),
 				new TypeToken<LinkedHashMap<String, String>>(){}.getType());
 
 		if(null == mChannels)
@@ -128,8 +121,9 @@ public class SettingsActivity extends FragmentActivity implements ChannelDialogL
 		((Button) findViewById(R.id.editChannel)).setOnClickListener(this);
 		((Button) findViewById(R.id.deleteChannel)).setOnClickListener(this);
 
-		mEmailField.setText(mSharedPreferences.getString(EMAIL, ""));
-		mPasswordField.setText(mSharedPreferences.getString(PASSWORD, ""));
+		mEmailField.setText(mSharedPreferences.getString(Settings.EMAIL, ""));
+		mPasswordField.setText(mSharedPreferences.getString(Settings.PASSWORD, ""));
 		mChannelSpinner.setSelection(mCurrentChannelPosition);
+		mCurrentChannel = mSharedPreferences.getString(Settings.CURRENT_CHANNEL, "");
 	}
 }
