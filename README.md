@@ -16,10 +16,10 @@ Currently mapping is as follow:
 
 ##Roadmap
 
-- Make a kind of autologin and caching the token. As a result, the login button won't be needed anymore.
+- Make some kind of autologin and cache the token. As a result, the login button won't be needed anymore.
 - Improve app design. Wear it with the airhorn bot colors ;)
 
 ##Dependencies
 
-The app uses the mighty [android-async-http library](https://github.com/loopj/android-async-http) from loopj.
+The app uses the mighty [android-async-http library](https://github.com/loopj/android-async-http) from loopj.  
 It also uses a class from a [gist](https://gist.github.com/ayvazj/6e8dcf689be7cec89579). Many thanks to ayvazj for that. 
