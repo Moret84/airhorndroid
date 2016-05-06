@@ -1,7 +1,6 @@
 package bosscorp.airhorndroid;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -9,101 +8,54 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import cz.msebera.android.httpclient.Header;
-import org.json.JSONObject;
-import org.json.JSONException;
 
-public class AirhornActivity extends ActionBarActivity
+public class AirhornActivity extends ActionBarActivity implements OnClickListener
 {
-	private JsonHttpResponseHandler mResponseHandler;
 	private String mToken;
-	private SharedPreferences mSharedPreferences;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		mSharedPreferences = getSharedPreferences(Settings.PREFERENCES, MODE_PRIVATE);
 
-		mResponseHandler = new JsonHttpResponseHandler()
-		{
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
-			{
-				try
-				{
-					mToken = response.getString("token");
-					Toast.makeText(AirhornActivity.this, mToken, Toast.LENGTH_LONG).show();
-				}
-				catch(JSONException e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, String res, Throwable  t)
-			{
-			}
-		};
-
-		((Button) findViewById(R.id.login)).setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				login();
-			}
-		});
-
-		((Button) findViewById(R.id.onetap)).setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				sendMessage("default");
-			}
-		});
-		((Button) findViewById(R.id.doubletap)).setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				sendMessage("reverb");
-			}
-		});
-		((Button) findViewById(R.id.tripletap)).setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				sendMessage("tripletap");
-			}
-		});
-		((Button) findViewById(R.id.fourtap)).setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				sendMessage("fourtap");
-			}
-		});
+		((Button) findViewById(R.id.onetap)).setOnClickListener(this);
+		((Button) findViewById(R.id.doubletap)).setOnClickListener(this);
+		((Button) findViewById(R.id.tripletap)).setOnClickListener(this);
+		((Button) findViewById(R.id.fourtap)).setOnClickListener(this);
 	}
 
-	private void sendMessage(String arg)
+	@Override
+	public void onClick(View v)
 	{
-		DummyDiscordClient.sendMessage(mToken, mSharedPreferences.getString(Settings.CURRENT_CHANNEL, ""), "!airhorn " + arg);
-	}
+		String message = "";
 
-	private void login()
-	{
-		DummyDiscordClient.login(mSharedPreferences.getString(Settings.EMAIL, ""),
-				mSharedPreferences.getString(Settings.PASSWORD, ""),
-				mResponseHandler);
+		switch(v.getId())
+		{
+			case R.id.onetap:
+				message = "!airhorn default";
+				break;
+			case R.id.doubletap:
+				message = "!airhorn reverb";
+				break;
+			case R.id.tripletap:
+				message = "!airhorn tripletap";
+				break;
+			case R.id.fourtap:
+				message = "!airhorn fourtap";
+				break;
+		}
+
+		DummyDiscordClient.sendMessage(
+				Settings.getInstance().getToken(),
+				Settings.getInstance().getCurrentChannelNumber(),
+				message,
+				new JsonHttpResponseHandler()
+				{
+				}
+		);
 	}
 
 	@Override

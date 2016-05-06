@@ -12,6 +12,23 @@
 		android:layout_gravity="center_horizontal"
 		android:layout_marginBottom="10dp"
 		android:gravity="center_horizontal"
+		android:id="@+id/guildTitle"
+		android:text="@string/guilds" />
+
+	<Spinner
+		android:id="@+id/guildSpinner"
+		android:layout_width="270dp"
+		android:layout_marginBottom="20dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_height="wrap_content" />
+
+	<TextView
+		android:layout_width="250dp"
+		android:textSize="20dp"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="10dp"
+		android:gravity="center_horizontal"
 		android:id="@+id/channelTitle"
 		android:text="@string/channels" />
 
@@ -22,69 +39,11 @@
 		android:layout_gravity="center_horizontal"
 		android:layout_height="wrap_content" />
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal"
-	android:layout_width="wrap_content"
-	android:layout_marginBottom="70dp"
-	android:layout_height="wrap_content"
-	android:layout_gravity="center_horizontal">
-
-	<Button
-		android:text="@string/add"
-		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-		android:id="@+id/addChannel" />
-
-	<Button
-		android:text="@string/edit"
-		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-		android:id="@+id/editChannel" />
-
-	<Button
-		android:text="@string/delete"
-		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-		android:id="@+id/deleteChannel" />
-
-</LinearLayout>
-
-	<TextView
-		android:layout_width="250dp"
-		android:textSize="20dp"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center_horizontal"
-		android:layout_marginBottom="10dp"
-		android:gravity="center_horizontal"
-		android:id="@+id/credentialsTitle"
-		android:text="@string/credentials" />
-
-	<EditText
-		android:layout_width="240dp"
-		android:layout_height="wrap_content"
-		android:id="@+id/emailField"
-		android:maxLines="1"
-		android:focusable="true"
-		android:inputType="textEmailAddress"
-		android:layout_gravity="center_vertical|center_horizontal"
-		android:hint="@string/email" />
-
-	<EditText
-		android:layout_width="240dp"
-		android:layout_height="wrap_content"
-		android:id="@+id/passwordField"
-		android:maxLines="1"
-		android:focusable="true"
-		android:inputType="textPassword"
-		android:layout_gravity="center_vertical|center_horizontal"
-		android:layout_marginBottom="30dp"
-		android:fontFamily="sans-serif"
-		android:hint="@string/password" />
-
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/save"
-		android:id="@+id/save"
+		android:text="@string/ok"
+		android:id="@+id/ok"
 		android:layout_gravity="center_vertical|center_horizontal"/>
+
 </LinearLayout>

@@ -1,70 +1,56 @@
 package bosscorp.airhorndroid;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import cz.msebera.android.httpclient.Header;
 
 import java.util.Map.Entry;
-import java.util.LinkedHashMap;
 
-public class SettingsActivity extends FragmentActivity implements ChannelDialogListener, OnItemSelectedListener, OnClickListener
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
+
+public class SettingsActivity extends FragmentActivity implements OnItemSelectedListener, OnClickListener
 {
-
-	private EditText mEmailField, mPasswordField;
-	private String mCurrentChannel;
-	private int mCurrentChannelPosition;
-	private Spinner mChannelSpinner;
-	private SharedPreferences mSharedPreferences;
-	private LinkedHashMap<String, String> mChannels;
-	private LinkedHashMapAdapter mAdapter;
-	private Gson mGson;
+	private Spinner mGuildSpinner, mChannelSpinner;
+	private LinkedHashMapAdapter mGuildAdapter, mChannelAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
-
 		init();
-	}
-
-	private void saveSettings()
-	{
-		Editor editor = mSharedPreferences.edit();
-
-		editor.putString(Settings.EMAIL, mEmailField.getText().toString());
-		editor.putString(Settings.PASSWORD, mPasswordField.getText().toString());
-		editor.putString(Settings.CHANNELS, mGson.toJson(mChannels));
-		editor.putString(Settings.CURRENT_CHANNEL, mChannels.get(mCurrentChannel));
-
-		editor.commit();
-	}
-
-	@Override
-	public void onDialogPositiveClick(String name, String key)
-	{
-		mChannels.put(name, key);
-		mAdapter.notifyDataSetChanged();
+		populateGuildSpinner();
 	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
 	{
-		mChannelSpinner.setSelection(pos);
-		mCurrentChannel = ((Entry<String, String>) parent.getSelectedItem()).getKey();
-		mCurrentChannelPosition = pos;
+		switch(parent.getId())
+		{
+			case R.id.guildSpinner:
+				Settings.getInstance().setCurrentGuild(
+						((Entry<String, String>) parent.getSelectedItem()).getKey()
+				);
+				populateChannelSpinner();
+				break;
+			case R.id.channelSpinner:
+				Settings.getInstance().setCurrentChannel(
+						((Entry<String, String>) parent.getSelectedItem()).getKey()
+				);
+				break;
+		}
 	}
 
 	@Override
@@ -77,53 +63,101 @@ public class SettingsActivity extends FragmentActivity implements ChannelDialogL
 	{
 		switch(v.getId())
 		{
-			case R.id.save:
-				saveSettings();
+			case R.id.ok:
 				finish();
-				break;
-			case R.id.addChannel:
-				new ChannelDialogFragment(getResources().getString(R.string.addChannel))
-					.show(getFragmentManager(), "ChannelDialogFragment");
-				break;
-			case R.id.editChannel:
-				new ChannelDialogFragment(getResources().getString(R.string.editChannel),
-						mCurrentChannel,
-						mChannels.get(mCurrentChannel)
-					)
-					.show(getFragmentManager(), "ChannelDialogFragment");
-				break;
-			case R.id.deleteChannel:
-				mChannels.remove(mCurrentChannel);
-				mAdapter.notifyDataSetChanged();
 				break;
 		}
 	}
 
+	private void populateGuildSpinner()
+	{
+		DummyDiscordClient.getGuilds(Settings.getInstance().getToken(),
+			new JsonHttpResponseHandler()
+			{
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, JSONArray response)
+				{
+					for(int i=0; i < response.length(); ++i)
+					{
+						try
+						{
+							JSONObject current = response.getJSONObject(i);
+							Settings.getInstance().addGuild(current.getString("name"), current.getString("id"));
+						}
+						catch(JSONException e)
+						{
+							e.printStackTrace();
+						}
+					}
+
+					mGuildAdapter.notifyDataSetChanged();
+					mGuildSpinner.setSelection(mGuildAdapter.getPosition(Settings.getInstance().getCurrentGuildName()));
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject response)
+				{
+					Toast.makeText(getApplicationContext(),
+						"Couldn't get guilds. Error code " + statusCode,
+						Toast.LENGTH_LONG).show();
+				}
+			}
+		);
+	}
+
+	private void populateChannelSpinner()
+	{
+		Settings.getInstance().getChannelList().clear();
+		DummyDiscordClient.getChannels(Settings.getInstance().getToken(),
+			Settings.getInstance().getCurrentGuildNumber(),
+			new JsonHttpResponseHandler()
+			{
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, JSONArray response)
+				{
+					for(int i=0; i < response.length(); ++i)
+					{
+						try
+						{
+							JSONObject current = response.getJSONObject(i);
+							if(current.getString("type").equals("text"))
+								Settings.getInstance().addChannel(current.getString("name"), current.getString("id"));
+						}
+						catch(JSONException e)
+						{
+							e.printStackTrace();
+						}
+					}
+
+					mChannelAdapter.notifyDataSetChanged();
+					mChannelSpinner.setSelection(mChannelAdapter.getPosition(Settings.getInstance().getCurrentChannelName()));
+				}
+			}
+		);
+	}
+
 	private void init()
 	{
-		mEmailField = (EditText) findViewById(R.id.emailField);
-		mPasswordField = (EditText) findViewById(R.id.passwordField);
+		((Button) findViewById(R.id.ok)).setOnClickListener(this);
+		//Setting up Spinner
+		mGuildSpinner = (Spinner) findViewById(R.id.guildSpinner);
 		mChannelSpinner = (Spinner) findViewById(R.id.channelSpinner);
+
+		mGuildSpinner.setOnItemSelectedListener(this);
 		mChannelSpinner.setOnItemSelectedListener(this);
-		mSharedPreferences = getSharedPreferences(Settings.PREFERENCES, MODE_PRIVATE);
-		mGson = new Gson();
-		mChannels = mGson.fromJson(mSharedPreferences.getString(Settings.CHANNELS, ""),
-				new TypeToken<LinkedHashMap<String, String>>(){}.getType());
 
-		if(null == mChannels)
-			mChannels = new LinkedHashMap<String, String>();
-		mAdapter = new LinkedHashMapAdapter<String, String>(this, android.R.layout.simple_spinner_item, mChannels);
-		mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mChannelSpinner.setAdapter(mAdapter);
+		mGuildAdapter = new LinkedHashMapAdapter<String, String>(this,
+				android.R.layout.simple_spinner_item,
+				Settings.getInstance().getGuildList()
+		);
+		mGuildAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mGuildSpinner.setAdapter(mGuildAdapter);
 
-		((Button) findViewById(R.id.save)).setOnClickListener(this);
-		((Button) findViewById(R.id.addChannel)).setOnClickListener(this);
-		((Button) findViewById(R.id.editChannel)).setOnClickListener(this);
-		((Button) findViewById(R.id.deleteChannel)).setOnClickListener(this);
-
-		mEmailField.setText(mSharedPreferences.getString(Settings.EMAIL, ""));
-		mPasswordField.setText(mSharedPreferences.getString(Settings.PASSWORD, ""));
-		mChannelSpinner.setSelection(mCurrentChannelPosition);
-		mCurrentChannel = mSharedPreferences.getString(Settings.CURRENT_CHANNEL, "");
+		mChannelAdapter = new LinkedHashMapAdapter<String, String>(this,
+				android.R.layout.simple_spinner_item,
+				Settings.getInstance().getChannelList()
+		);
+		mChannelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mChannelSpinner.setAdapter(mChannelAdapter);
 	}
 }

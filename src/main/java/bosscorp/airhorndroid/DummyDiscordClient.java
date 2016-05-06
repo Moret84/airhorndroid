@@ -4,15 +4,9 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-import cz.msebera.android.httpclient.Header;
-import org.json.JSONObject;
-import org.json.JSONException;
-
 public class DummyDiscordClient
 {
 	public static final String BASE_URL = "https://discordapp.com/api/";
-	private static String mToken;
 
 	private static AsyncHttpClient mClient = new AsyncHttpClient();
 
@@ -24,22 +18,24 @@ public class DummyDiscordClient
 		mClient.post(BASE_URL + "auth/login", params, responseHandler);
 	}
 
-	public static void sendMessage(String token, String channel, String message)
+	public static void getGuilds(String token, JsonHttpResponseHandler responseHandler)
+	{
+		mClient.addHeader("Authorization", token);
+		mClient.get(BASE_URL + "users/@me/guilds", responseHandler);
+	}
+
+	public static void getChannels(String token, String guild, JsonHttpResponseHandler responseHandler)
+	{
+		RequestParams params = new RequestParams();
+		mClient.addHeader("Authorization", token);
+		mClient.get(BASE_URL + "guilds/" + guild + "/channels", params, responseHandler);
+	}
+
+	public static void sendMessage(String token, String channel, String message, JsonHttpResponseHandler responseHandler)
 	{
 		RequestParams params = new RequestParams();
 		params.put("content", message);
 		mClient.addHeader("Authorization", token);
-		mClient.post(BASE_URL + "channels/" + channel + "/messages", params, new JsonHttpResponseHandler()
-		{
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, JSONObject response)
-			{
-			}
-
-			@Override
-			public void onFailure(int statusCode, Header[] headers, String res, Throwable  t)
-			{
-			}
-		});
+		mClient.post(BASE_URL + "channels/" + channel + "/messages", params, responseHandler);
 	}
 }

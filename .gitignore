@@ -2,3 +2,4 @@ build/*
 gradlew.bat
 .gradle
 .*.swp
+bosscorpReleaseKey.keystore
