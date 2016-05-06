@@ -20,4 +20,4 @@ Currently mapping is as follow:
 ##Dependencies
 
 The app uses the mighty [android-async-http library](https://github.com/loopj/android-async-http) from loopj.  
-It also uses a class from a [gist](https://gist.github.com/ayvazj/6e8dcf689be7cec89579). Many thanks to ayvazj for that.
+It also uses a class from a [gist](https://gist.github.com/ayvazj/6e8dcf689be7cec89579). Many thanks to ayvazj for that. 
