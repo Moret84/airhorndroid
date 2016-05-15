@@ -1,0 +1,6 @@
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+	<style name="AirhorndroidTheme" parent="@style/Theme.AppCompat.Light">
+		<item name="colorPrimary">#f36857</item>
+		<item name="android:textColorPrimary">#ffffff</item>
+	</style>
+</resources>

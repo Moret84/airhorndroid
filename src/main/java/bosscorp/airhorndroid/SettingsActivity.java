@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.support.v4.app.FragmentActivity;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,10 +18,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-public class SettingsActivity extends FragmentActivity implements OnItemSelectedListener, OnClickListener
+public class SettingsActivity extends FragmentActivity implements OnClickListener
 {
-	private Spinner mGuildSpinner, mChannelSpinner;
-	private LinkedHashMapAdapter mGuildAdapter, mChannelAdapter;
+	private Spinner mGuildSpinner;
+	private LinkedHashMapAdapter mGuildAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -35,38 +33,25 @@ public class SettingsActivity extends FragmentActivity implements OnItemSelected
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-	{
-		switch(parent.getId())
-		{
-			case R.id.guildSpinner:
-				Settings.getInstance().setCurrentGuild(
-						((Entry<String, String>) parent.getSelectedItem()).getKey()
-				);
-				populateChannelSpinner();
-				break;
-			case R.id.channelSpinner:
-				Settings.getInstance().setCurrentChannel(
-						((Entry<String, String>) parent.getSelectedItem()).getKey()
-				);
-				break;
-		}
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent)
-	{
-	}
-
-	@Override
 	public void onClick(View v)
 	{
 		switch(v.getId())
 		{
 			case R.id.ok:
+				Settings.getInstance().setCurrentGuild(
+						((Entry<String, String>) mGuildSpinner.getSelectedItem()).getKey()
+				);
 				finish();
 				break;
 		}
+	}
+
+	private void restoreCurrentGuild()
+	{
+		String currentGuild = Settings.getInstance().getCurrentGuildName();
+
+		if(null != currentGuild)
+			mGuildSpinner.setSelection(mGuildAdapter.getPosition(currentGuild));
 	}
 
 	private void populateGuildSpinner()
@@ -91,7 +76,7 @@ public class SettingsActivity extends FragmentActivity implements OnItemSelected
 					}
 
 					mGuildAdapter.notifyDataSetChanged();
-					mGuildSpinner.setSelection(mGuildAdapter.getPosition(Settings.getInstance().getCurrentGuildName()));
+					restoreCurrentGuild();
 				}
 
 				@Override
@@ -105,46 +90,10 @@ public class SettingsActivity extends FragmentActivity implements OnItemSelected
 		);
 	}
 
-	private void populateChannelSpinner()
-	{
-		Settings.getInstance().getChannelList().clear();
-		DummyDiscordClient.getChannels(Settings.getInstance().getToken(),
-			Settings.getInstance().getCurrentGuildNumber(),
-			new JsonHttpResponseHandler()
-			{
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, JSONArray response)
-				{
-					for(int i=0; i < response.length(); ++i)
-					{
-						try
-						{
-							JSONObject current = response.getJSONObject(i);
-							if(current.getString("type").equals("text"))
-								Settings.getInstance().addChannel(current.getString("name"), current.getString("id"));
-						}
-						catch(JSONException e)
-						{
-							e.printStackTrace();
-						}
-					}
-
-					mChannelAdapter.notifyDataSetChanged();
-					mChannelSpinner.setSelection(mChannelAdapter.getPosition(Settings.getInstance().getCurrentChannelName()));
-				}
-			}
-		);
-	}
-
 	private void init()
 	{
 		((Button) findViewById(R.id.ok)).setOnClickListener(this);
-		//Setting up Spinner
 		mGuildSpinner = (Spinner) findViewById(R.id.guildSpinner);
-		mChannelSpinner = (Spinner) findViewById(R.id.channelSpinner);
-
-		mGuildSpinner.setOnItemSelectedListener(this);
-		mChannelSpinner.setOnItemSelectedListener(this);
 
 		mGuildAdapter = new LinkedHashMapAdapter<String, String>(this,
 				android.R.layout.simple_spinner_item,
@@ -152,12 +101,5 @@ public class SettingsActivity extends FragmentActivity implements OnItemSelected
 		);
 		mGuildAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mGuildSpinner.setAdapter(mGuildAdapter);
-
-		mChannelAdapter = new LinkedHashMapAdapter<String, String>(this,
-				android.R.layout.simple_spinner_item,
-				Settings.getInstance().getChannelList()
-		);
-		mChannelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mChannelSpinner.setAdapter(mChannelAdapter);
 	}
 }

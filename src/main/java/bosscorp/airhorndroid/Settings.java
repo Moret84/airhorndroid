@@ -11,14 +11,14 @@ public class Settings
 	private static Settings mInstance;
 
 	public final static String PREFERENCES = "bosscorp.airhorndroid.PREFERENCES";
-	public final static String CURRENT_GUILD = "bosscorp.airhorndroid.CURRENT_GUILD";
-	public final static String CURRENT_CHANNEL = "bosscorp.airhorndroid.CURRENT_CHANNEL";
+	public final static String CURRENT_GUILD_NAME = "bosscorp.airhorndroid.CURRENT_GUILD_NAME";
+	public final static String CURRENT_GUILD_NUMBER = "bosscorp.airhorndroid.CURRENT_GUILD_NUMBER";
 	public final static String EMAIL = "bosscorp.airhorndroid.EMAIL";
 	public final static String PASSWORD = "bosscorp.airhorndroid.PASSWORD";
 	public final static String TOKEN = "bosscorp.airhorndroid.TOKEN";
 
-	private String mCurrentGuildName, mCurrentChannelName, mEmail, mPassword, mToken;
-	private LinkedHashMap<String, String> mGuilds, mChannels;
+	private String mCurrentGuildName, mCurrentGuildNumber, mEmail, mPassword, mToken;
+	private LinkedHashMap<String, String> mGuilds;
 
 	private Context mContext;
 	private SharedPreferences mSharedPreferences;
@@ -29,10 +29,10 @@ public class Settings
 		mContext = context;
 		mSharedPreferences = mContext.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		mEditor = mSharedPreferences.edit();
+
 		if(null == mGuilds)
 			mGuilds = new LinkedHashMap<String, String>();
-		if(null == mChannels)
-			mChannels = new LinkedHashMap<String, String>();
+
 		restoreSettings();
 	}
 
@@ -53,8 +53,8 @@ public class Settings
 
 	private void restoreSettings()
 	{
-		mCurrentGuildName = mSharedPreferences.getString(CURRENT_GUILD, "");
-		mCurrentChannelName = mSharedPreferences.getString(CURRENT_CHANNEL, "");
+		mCurrentGuildName = mSharedPreferences.getString(CURRENT_GUILD_NAME, "");
+		mCurrentGuildNumber = mSharedPreferences.getString(CURRENT_GUILD_NUMBER, "");
 		mEmail = mSharedPreferences.getString(EMAIL, "");
 		mPassword = mSharedPreferences.getString(PASSWORD, "");
 		mToken = mSharedPreferences.getString(TOKEN, "");
@@ -73,11 +73,6 @@ public class Settings
 		return mGuilds;
 	}
 
-	public LinkedHashMap<String, String> getChannelList()
-	{
-		return mChannels;
-	}
-
 	public String getCurrentGuildName()
 	{
 		return mCurrentGuildName;
@@ -85,17 +80,7 @@ public class Settings
 
 	public String getCurrentGuildNumber()
 	{
-		return mGuilds.get(mCurrentGuildName);
-	}
-
-	public String getCurrentChannelName()
-	{
-		return mCurrentGuildName;
-	}
-
-	public String getCurrentChannelNumber()
-	{
-		return mChannels.get(mCurrentChannelName);
+		return mCurrentGuildNumber;
 	}
 
 	public String getPassword()
@@ -114,15 +99,9 @@ public class Settings
 	}
 
 	//Setters
-
 	public void addGuild(String name, String number)
 	{
 		mGuilds.put(name, number);
-	}
-
-	public void addChannel(String name, String number)
-	{
-		mChannels.put(name, number);
 	}
 
 	public void setToken(String token)
@@ -134,13 +113,9 @@ public class Settings
 	public void setCurrentGuild(String guild)
 	{
 		mCurrentGuildName = guild;
-		saveSetting(CURRENT_GUILD, mCurrentGuildName);
-	}
-
-	public void setCurrentChannel(String channel)
-	{
-		mCurrentChannelName = channel;
-		saveSetting(CURRENT_CHANNEL, mCurrentChannelName);
+		mCurrentGuildNumber = mGuilds.get(guild);
+		saveSetting(CURRENT_GUILD_NAME, mCurrentGuildName);
+		saveSetting(CURRENT_GUILD_NUMBER, mCurrentGuildNumber);
 	}
 
 	public void setEmail(String email)

@@ -7,9 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+import cz.msebera.android.httpclient.Header;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
 
 public class AirhornActivity extends ActionBarActivity implements OnClickListener
 {
@@ -21,10 +26,11 @@ public class AirhornActivity extends ActionBarActivity implements OnClickListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		((Button) findViewById(R.id.onetap)).setOnClickListener(this);
-		((Button) findViewById(R.id.doubletap)).setOnClickListener(this);
-		((Button) findViewById(R.id.tripletap)).setOnClickListener(this);
-		((Button) findViewById(R.id.fourtap)).setOnClickListener(this);
+		((ImageButton) findViewById(R.id.onetap)).setOnClickListener(this);
+		((ImageButton) findViewById(R.id.doubletap)).setOnClickListener(this);
+		((ImageButton) findViewById(R.id.tripletap)).setOnClickListener(this);
+		((ImageButton) findViewById(R.id.fourtap)).setOnClickListener(this);
+		((ImageButton) findViewById(R.id.airhornButton)).setOnClickListener(this);
 	}
 
 	@Override
@@ -46,14 +52,25 @@ public class AirhornActivity extends ActionBarActivity implements OnClickListene
 			case R.id.fourtap:
 				message = "!airhorn fourtap";
 				break;
+			case R.id.airhornButton:
+				message = "!airhorn";
+				break;
 		}
 
 		DummyDiscordClient.sendMessage(
 				Settings.getInstance().getToken(),
-				Settings.getInstance().getCurrentChannelNumber(),
+				Settings.getInstance().getCurrentGuildNumber(),
 				message,
 				new JsonHttpResponseHandler()
 				{
+					@Override
+					public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject response)
+					{
+						Toast.makeText(getApplicationContext(),
+							"Error occured during Connection. Status code: " + statusCode,
+							Toast.LENGTH_LONG
+						).show();
+					}
 				}
 		);
 	}

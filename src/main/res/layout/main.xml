@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:layout_gravity="center_vertical|center_horizontal">
 
-	<Button
+	<ImageButton
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="1"
 		android:id="@+id/onetap"
-		android:layout_gravity="center_vertical|center_horizontal"/>
+		android:src="@drawable/oneairhorn_anim"
+		android:background="@null"
+		android:layout_gravity="left"
+		/>
 
-	<Button
+	<ImageButton
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="2"
 		android:id="@+id/doubletap"
-		android:layout_gravity="center_vertical|center_horizontal"/>
+		android:src="@drawable/twoairhorn_anim"
+		android:background="@null"
+		android:layout_gravity="right"
+		/>
 
-	<Button
+	<ImageButton
+		android:id="@+id/airhornButton"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="3"
+		android:src="@drawable/airhorn_anim"
+		android:background="@null"
+		android:layout_gravity="center_vertical|center_horizontal" />
+
+	<ImageButton
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:id="@+id/tripletap"
-		android:layout_gravity="center_vertical|center_horizontal"/>
+		android:src="@drawable/threeairhorn_anim"
+		android:background="@null"
+		android:layout_gravity="left"
+		/>
 
-	<Button
+	<ImageButton
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="4"
+		android:src="@drawable/fourairhorn_anim"
+		android:background="@null"
 		android:id="@+id/fourtap"
-		android:layout_gravity="center_vertical|center_horizontal"/>
+		android:layout_gravity="right"
+		/>
 </LinearLayout>
