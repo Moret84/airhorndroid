@@ -13,22 +13,26 @@ android {
 	compileSdkVersion 'android-23'
 		buildToolsVersion '23.0.3'
 
-		buildTypes {
-			release {
-				proguardFile getDefaultProguardFile('proguard-android.txt')
-			}
-		}
-	defaultConfig {
-		vectorDrawables.useSupportLibrary = true
-	}
 	signingConfigs {
 		release {
 			storeFile file("bosscorpReleaseKey.keystore")
-			storePassword System.getenv("KSTOREPWD")
-			keyAlias "BossKey"
-			keyPassword System.getenv("KEYPWD")
+				storePassword System.getenv("KSTOREPWD")
+				keyAlias "BossKey"
+				keyPassword System.getenv("KEYPWD")
 		}
 	}
+
+	buildTypes {
+		release {
+				proguardFile getDefaultProguardFile('proguard-android.txt')
+				signingConfig signingConfigs.release
+		}
+	}
+
+	defaultConfig {
+		vectorDrawables.useSupportLibrary = true
+	}
+
 
 }
 
