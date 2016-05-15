@@ -2,20 +2,19 @@
 
 ##Informations and usage
 
-Airhorndroid is a simple android app to triggger airhorn calls on the awesome [hammerandchisel's airhorn discord bot](https://github.com/hammerandchisel/airhornbot) without have to type any text.  
+Airhorndroid is a simple android companion app to triggger airhorn calls on the awesome [hammerandchisel's airhorn discord bot](https://github.com/hammerandchisel/airhornbot) without have to type any text. When you are in game, it is impractical to switch to discord window just to type "!airhorn". That's why I built this app.  
 It is very easy to use. Just launch it, type your credentials and validate.  
 You will be notified that you have been successfully connected !  
-Then you're on the main screen. Under settings menu, you can choose your target guild and channel.  
-The main screen holds 4 buttons : 1, 2, 3, 4 that you can press to make !airhorn calls.  
+Then you're on the main screen. Under settings menu, you can choose your target guild.  
+
+The main screen holds 5 buttons you can press to make !airhorn calls.  
 Currently mapping is as follow:  
 - 1 button -> !airhorn default
 - 2 button -> !airhorn reverb
+- middle button -> !airhorn
 - 3 button -> !airhorn tripletap
 - 4 button -> !airhorn fourtap
 
-##Roadmap
-
-- Improve app design. Wear it with the airhorn bot colors ;)
 
 ##Dependencies
 
