@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import android.util.Log;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
@@ -50,7 +52,9 @@ public class SettingsActivity extends FragmentActivity implements OnClickListene
 	{
 		String currentGuild = Settings.getInstance().getCurrentGuildName();
 
-		if(null != currentGuild)
+		if(null == currentGuild || currentGuild.equals(""))
+			mGuildSpinner.setSelection(0);
+		else
 			mGuildSpinner.setSelection(mGuildAdapter.getPosition(currentGuild));
 	}
 
