@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -31,6 +32,14 @@ public class AirhornActivity extends ActionBarActivity implements OnClickListene
 		((ImageButton) findViewById(R.id.tripletap)).setOnClickListener(this);
 		((ImageButton) findViewById(R.id.fourtap)).setOnClickListener(this);
 		((ImageButton) findViewById(R.id.airhornButton)).setOnClickListener(this);
+	}
+
+	private void setKeepAwake()
+	{
+		if(Settings.getInstance().getKeepAwake())
+			getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+		else
+			getWindow().clearFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
 	@Override
@@ -67,12 +76,12 @@ public class AirhornActivity extends ActionBarActivity implements OnClickListene
 					public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject response)
 					{
 						Toast.makeText(getApplicationContext(),
-							"Error occured during Connection. Status code: " + statusCode,
-							Toast.LENGTH_LONG
-						).show();
+								"Error occured during Connection. Status code: " + statusCode,
+								Toast.LENGTH_LONG
+								).show();
 					}
 				}
-		);
+				);
 	}
 
 	@Override
@@ -90,10 +99,16 @@ public class AirhornActivity extends ActionBarActivity implements OnClickListene
 		if (id == R.id.action_settings)
 		{
 			Intent intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, 0);
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		setKeepAwake();
 	}
 }

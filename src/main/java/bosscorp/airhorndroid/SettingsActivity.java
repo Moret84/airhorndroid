@@ -6,6 +6,7 @@ import android.view.View.OnClickListener;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import android.util.Log;
@@ -24,6 +25,7 @@ public class SettingsActivity extends FragmentActivity implements OnClickListene
 {
 	private Spinner mGuildSpinner;
 	private LinkedHashMapAdapter mGuildAdapter;
+	private Switch mKeepAwakeSwitch;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -43,6 +45,7 @@ public class SettingsActivity extends FragmentActivity implements OnClickListene
 				Settings.getInstance().setCurrentGuild(
 						((Entry<String, String>) mGuildSpinner.getSelectedItem()).getKey()
 				);
+				Settings.getInstance().setKeepAwake(mKeepAwakeSwitch.isChecked());
 				finish();
 				break;
 		}
@@ -97,6 +100,8 @@ public class SettingsActivity extends FragmentActivity implements OnClickListene
 	private void init()
 	{
 		((Button) findViewById(R.id.ok)).setOnClickListener(this);
+		mKeepAwakeSwitch = ((Switch) findViewById(R.id.keepAwake));
+		mKeepAwakeSwitch.setChecked(Settings.getInstance().getKeepAwake());
 		mGuildSpinner = (Spinner) findViewById(R.id.guildSpinner);
 
 		mGuildAdapter = new LinkedHashMapAdapter<String, String>(this,

@@ -16,8 +16,10 @@ public class Settings
 	public final static String EMAIL = "bosscorp.airhorndroid.EMAIL";
 	public final static String PASSWORD = "bosscorp.airhorndroid.PASSWORD";
 	public final static String TOKEN = "bosscorp.airhorndroid.TOKEN";
+	public final static String KEEP_AWAKE = "bosscorp.airhorndroid.KEEP_AWAKE";
 
 	private String mCurrentGuildName, mCurrentGuildNumber, mEmail, mPassword, mToken;
+	private boolean mKeepAwake;
 	private LinkedHashMap<String, String> mGuilds;
 
 	private Context mContext;
@@ -58,11 +60,18 @@ public class Settings
 		mEmail = mSharedPreferences.getString(EMAIL, "");
 		mPassword = mSharedPreferences.getString(PASSWORD, "");
 		mToken = mSharedPreferences.getString(TOKEN, "");
+		mKeepAwake = mSharedPreferences.getBoolean(KEEP_AWAKE, false);
 	}
 
 	private void saveSetting(String name, String value)
 	{
 		mEditor.putString(name, value);
+		mEditor.commit();
+	}
+
+	private void saveSetting(String name, boolean value)
+	{
+		mEditor.putBoolean(name, value);
 		mEditor.commit();
 	}
 
@@ -98,6 +107,11 @@ public class Settings
 		return mToken;
 	}
 
+	public boolean getKeepAwake()
+	{
+		return mKeepAwake;
+	}
+
 	//Setters
 	public void addGuild(String name, String number)
 	{
@@ -128,5 +142,11 @@ public class Settings
 	{
 		mPassword = password;
 		saveSetting(PASSWORD, mPassword);
+	}
+
+	public void setKeepAwake(boolean value)
+	{
+		mKeepAwake = value;
+		saveSetting(KEEP_AWAKE, mKeepAwake);
 	}
 }
