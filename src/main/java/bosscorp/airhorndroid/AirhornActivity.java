@@ -11,10 +11,6 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import cz.msebera.android.httpclient.Header;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
-
 import org.json.JSONObject;
 
 public class AirhornActivity extends ActionBarActivity implements OnClickListener
@@ -70,10 +66,10 @@ public class AirhornActivity extends ActionBarActivity implements OnClickListene
 				Settings.getInstance().getToken(),
 				Settings.getInstance().getCurrentGuildNumber(),
 				message,
-				new JsonHttpResponseHandler()
+				new DummyDiscordResponseHandler()
 				{
 					@Override
-					public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject response)
+					public void onFailure(int statusCode, JSONObject response)
 					{
 						Toast.makeText(getApplicationContext(),
 								"Error occured during Connection. Status code: " + statusCode,

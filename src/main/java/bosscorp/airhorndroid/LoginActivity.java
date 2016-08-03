@@ -9,12 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import cz.msebera.android.httpclient.Header;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.util.Log;
 
 public class LoginActivity extends Activity implements OnClickListener
 {
@@ -46,10 +43,10 @@ public class LoginActivity extends Activity implements OnClickListener
 				Settings.getInstance().setEmail(email);
 				Settings.getInstance().setPassword(password);
 
-				DummyDiscordClient.login(email, password, new JsonHttpResponseHandler()
+				DummyDiscordClient.login(email, password, new DummyDiscordResponseHandler()
 				{
 					@Override
-					public void onSuccess(int statusCode, Header[] headers, JSONObject response)
+					public void onSuccess(int statusCode, JSONObject response)
 					{
 						if(response.has("token"))
 						{
@@ -71,12 +68,13 @@ public class LoginActivity extends Activity implements OnClickListener
 					}
 
 					@Override
-					public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject response)
+					public void onFailure(int statusCode, JSONObject response)
 					{
 						Toast.makeText(getApplicationContext(),
 							"Error occured during Connection. Status code: " + statusCode,
 							Toast.LENGTH_LONG
 						).show();
+						Log.e("GUEZ", response.toString());
 					}
 				});
 				break;

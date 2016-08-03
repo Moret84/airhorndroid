@@ -11,10 +11,6 @@ import android.widget.Toast;
 
 import android.util.Log;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import cz.msebera.android.httpclient.Header;
-
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
@@ -64,10 +60,10 @@ public class SettingsActivity extends FragmentActivity implements OnClickListene
 	private void populateGuildSpinner()
 	{
 		DummyDiscordClient.getGuilds(Settings.getInstance().getToken(),
-			new JsonHttpResponseHandler()
+			new DummyDiscordResponseHandler()
 			{
 				@Override
-				public void onSuccess(int statusCode, Header[] headers, JSONArray response)
+				public void onSuccess(int statusCode, JSONArray response)
 				{
 					for(int i=0; i < response.length(); ++i)
 					{
@@ -87,7 +83,7 @@ public class SettingsActivity extends FragmentActivity implements OnClickListene
 				}
 
 				@Override
-				public void onFailure(int statusCode, Header[] headers, Throwable t, JSONObject response)
+				public void onFailure(int statusCode, JSONObject response)
 				{
 					Toast.makeText(getApplicationContext(),
 						"Couldn't get guilds. Error code " + statusCode,
